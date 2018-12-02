@@ -4,4 +4,8 @@
     <string name="audio_status_start">start audio</string>
     <string name="audio_status_stop">stop audio</string>
     <string name="audio_running">正在录音中...</string>
+
+    <string name="audio_pcm_playing">正在播放中...</string>
+    <string name="audio_pcm_status_play">播放pcm</string>
+    <string name="audio_pcm_status_stop">停止pcm</string>
 </resources>

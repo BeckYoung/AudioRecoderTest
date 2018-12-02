@@ -41,19 +41,20 @@ public class AudioRecordTask implements Runnable {
         channelCount = audioRecord.getChannelCount();
         audioRecord.startRecording();
         isAudioRunning = true;
+        FileUtil filePCM = new FileUtil(FileUtil.PCM_EXTER);
         MainActivity.MainActMessage mainActMessage = new MainActivity.MainActMessage();
         mainActMessage.setActionType(MainActivity.AUDIO_RUNNING);
+        mainActMessage.setPcmFilePath(filePCM.getFilePath());
         EventBus.getDefault().post(mainActMessage);
 
 
         byte[] readBuffer = new byte[minBufferSize];
 
-        FileUtil filePCM = new FileUtil(FileUtil.PCM_EXTER);
         filePCM.init();
         while (isAudioRunning) {
 
             int readCount = audioRecord.read(readBuffer, 0, minBufferSize);
-            Log.d(TAG, "AudioRecord bufferSize=" + (minBufferSize) + "readCount=" + readCount);
+            Log.d(TAG, "AudioRecord bufferSize=" + (minBufferSize) + ",readCount=" + readCount);
             if (readCount > 0) {
                 filePCM.write(readBuffer,readCount);
             }
@@ -64,9 +65,11 @@ public class AudioRecordTask implements Runnable {
         Log.d(TAG, "AudioRecord stop");
         audioRecord.stop();
         audioRecord.release();
+        filePCM.release();
 
         MainActivity.MainActMessage messageStop = new MainActivity.MainActMessage();
         messageStop.setActionType(MainActivity.AUDIO_STOP);
+        messageStop.setPcmFilePath(filePCM.getFilePath());
         EventBus.getDefault().post(messageStop);
 
     }
